@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEA-SpeechBench</title>
+<meta name="description" content="A large-scale multitask benchmark for speech understanding across Southeast Asia. 11 languages, 9 tasks, 99 evaluation sets, 597 hours of audio. EMNLP 2026.">
+<meta property="og:title" content="SEA-SpeechBench">
+<meta property="og:description" content="A large-scale multitask benchmark for speech understanding across Southeast Asia. EMNLP 2026.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8C%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main>
+
+<header>
+  <h1>
+    <span class="name">SEA-SpeechBench</span>
+    <span class="sub">A Large-Scale Multitask Benchmark for Speech Understanding Across Southeast Asia</span>
+  </h1>
+
+  <div class="authors">
+    Jingyi Liao<sup>1,3,*</sup>,
+    Wenyu Zhang<sup>2,*,†</sup>,
+    Zhuohan Liu<sup>1</sup>,
+    Yingxu He<sup>1</sup>,
+    Geyu Lin<sup>1</sup>,
+    Xunlong Zou<sup>1</sup>,
+    Shuo Sun<sup>1</sup>,
+    Syed Ali Redha Alsagoff<sup>3,†</sup>,
+    Ai Ti Aw<sup>1</sup>
+
+    <div class="affil">
+      <sup>1</sup>Institute of Advanced Intelligence and Computing, A*STAR &nbsp;·&nbsp;
+      <sup>2</sup>Center for AI Safety &nbsp;·&nbsp;
+      <sup>3</sup>Nanyang Technological University
+      <span class="fn">
+        <sup>*</sup>Equal contribution. &nbsp;
+        <sup>†</sup>Work done at Institute for Infocomm Research (now Institute of Advanced Intelligence and Computing), A*STAR.
+      </span>
+    </div>
+  </div>
+
+  <div class="links">
+    <span class="link soon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Paper <span class="soon-tag">soon</span>
+    </span>
+    <span class="link soon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      Leaderboard <span class="soon-tag">soon</span>
+    </span>
+    <span class="link soon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+      Code <span class="soon-tag">soon</span>
+    </span>
+    <span class="link soon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+      Dataset <span class="soon-tag">soon</span>
+    </span>
+  </div>
+</header>
+
+<section>
+  <h2>Overview</h2>
+
+  <p class="abstract">
+    Audio and multimodal LLMs are measured almost entirely in English. Southeast Asia — over
+    650&nbsp;million speakers, many of its languages tonal and many of them low-resource — is
+    absent from existing audio benchmarks, and the regional speech models now appearing have no
+    common yardstick. <b>SEA-SpeechBench</b> is a benchmark for speech understanding across the
+    region.
+  </p>
+
+  <ul class="facts">
+    <li><b>11 languages.</b> The official languages of nine Southeast Asian countries: Burmese,
+      English, Filipino, Indonesian, Khmer, Lao, Malay, Mandarin Chinese, Tamil, Thai, Vietnamese.</li>
+    <li><b>9 tasks in 3 categories.</b> Speech processing (ASR, ST, SQA), paralinguistics
+      (ER, GR, AgeR, SpkR), and temporal reasoning (TCQ, TLoc).</li>
+    <li><b>97,194 samples.</b> Across 99 evaluation sets and 597 hours of audio, curated from
+      23 public and community corpora.</li>
+    <li><b>Bilingual prompting.</b> Every task is evaluated with both English and
+      native-language instructions, matching how people in the region address these systems.</li>
+    <li><b>Temporal reasoning.</b> Two new tasks treat audio as a searchable temporal space,
+      probing both directions of the time&#8596;content mapping over recordings up to 3 minutes.</li>
+    <li><b>16 systems evaluated.</b> Open models from 2B to 30B parameters, a cascaded
+      baseline evaluated on translation, and the commercial Gemini 2.5 Flash and GPT-4o.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Task suite</h2>
+
+  <figure>
+    <img src="assets/figs/task-suite.png" width="2003" height="855"
+         alt="Nine tasks with example prompts and answers, grouped into speech processing, temporal reasoning, and paralinguistics.">
+    <figcaption>
+      Nine tasks in three categories, with example prompts and answers.
+      <b>Speech processing</b> (red), <b>paralinguistics</b> (blue), and
+      <b>temporal reasoning</b> (green). Every task pairs an audio clip with a text instruction
+      and expects a textual response.
+    </figcaption>
+  </figure>
+
+  <p>
+    Speech processing and paralinguistic tasks use clips of 30 seconds or less, matching the
+    input limits of most current models; the two temporal reasoning tasks extend to 3 minutes.
+    All sources are unified into one format, resampled to 16&nbsp;kHz mono, and sampled under a
+    fixed seed with speaker-disjoint splits.
+  </p>
+</section>
+
+<section>
+  <h2>Composition</h2>
+
+  <div class="fig-row">
+    <figure>
+      <img src="assets/figs/dist-language.png" width="899" height="905"
+           alt="Donut chart of sample distribution by language: English 18.9%, Thai 17.2%, Chinese 16.8%, Vietnamese 11.0%, Indonesian 10.5%, Tamil 7.7%, Malay 5.3%, Filipino 4.7%, Burmese 3.8%, Khmer 3.2%, Lao the remainder.">
+      <figcaption>By language.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/figs/dist-task.png" width="864" height="901"
+           alt="Donut chart of sample distribution by task: ASR 27.6%, GR 14.0%, TCQ 13.5%, TLoc 13.5%, SpkR 8.1%, ST 7.4%, SQA 5.6%, ER 5.5%, AgeR 4.7%.">
+      <figcaption>By task.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/figs/dist-length.png" width="962" height="1280"
+           alt="Histogram of short audio lengths from 0 to 30 seconds, and a bar chart of long audio counts in the 30-60, 60-120 and 120-180 second bins.">
+      <figcaption>By audio length.</figcaption>
+    </figure>
+  </div>
+
+  <p class="fig-note">
+    Sample distribution across the benchmark. Low-resource languages such as Khmer, Lao and
+    Burmese are deliberately included to cover the region's full linguistic spectrum. Short
+    clips concentrate around sentence length; the temporal tasks add stratified long-form bins
+    of 30–60s, 60–120s and 120–180s.
+  </p>
+</section>
+
+<section>
+  <h2>Results</h2>
+
+  <p class="scope">
+    All nine tasks are evaluated under both English and native-language prompts. Tables that
+    break results down by language or by audio duration show the English-prompt condition, to
+    keep them readable; the remaining tables report both. Per-dataset results under both
+    conditions are in the paper's appendix.
+  </p>
+
+  <div class="tabs" role="tablist" aria-label="Result tables">
+    <button class="tab" role="tab" id="tab-asr" aria-controls="panel-asr" aria-selected="true">ASR</button>
+    <button class="tab" role="tab" id="tab-sp" aria-controls="panel-sp" aria-selected="false">Translation &amp; QA</button>
+    <button class="tab" role="tab" id="tab-para" aria-controls="panel-para" aria-selected="false">Paralinguistics</button>
+    <button class="tab" role="tab" id="tab-temporal" aria-controls="panel-temporal" aria-selected="false">Temporal reasoning</button>
+  </div>
+
+  <div class="panel" id="panel-asr" role="tabpanel" aria-labelledby="tab-asr">
+      <div class="tbl">
+        <div class="tbl-head">
+          <h3>Automatic Speech Recognition</h3>
+          <span class="cond">English prompts</span>
+        </div>
+        <p class="tbl-note">Averaged by language. Raw WER/CER (0.07 = 7%); lower is better.</p>
+        <div class="scroll">
+          <table data-better="lo">
+          <thead>
+            <tr>
+              <th class="l">Model</th><th>Size</th>
+              <th>en</th><th>tl</th><th>vi</th><th>id</th><th>ta</th><th>th</th><th>zh</th><th>km</th><th>lo</th><th>ms</th><th>my</th><th>Avg.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="l">Gemma-3n-it</td><td>2B</td><td>1.32</td><td>0.42</td><td>3.77</td><td>0.17</td><td>1.20</td><td>3.03</td><td>1.55</td><td>3.92</td><td>1.42</td><td>1.06</td><td>2.81</td><td>1.88</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>3B</td><td class="gbest">0.07</td><td>0.60</td><td>0.27</td><td>0.15</td><td>1.36</td><td>0.12</td><td class="gbest">0.05</td><td>2.97</td><td>1.39</td><td>0.23</td><td>2.01</td><td>0.84</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>3B</td><td class="gbest">0.07</td><td>0.20</td><td>0.35</td><td>0.11</td><td>0.43</td><td>0.08</td><td>0.11</td><td>1.72</td><td>0.86</td><td>0.17</td><td>1.19</td><td>0.48</td></tr>
+            <tr><td class="l">Voxtral</td><td>3B</td><td>0.21</td><td>2.40</td><td>0.93</td><td>0.36</td><td>1.20</td><td>0.57</td><td>0.45</td><td>1.72</td><td>1.29</td><td>0.76</td><td>5.05</td><td>1.36</td></tr>
+            <tr><td class="l">Gemma-3n-it</td><td>4B</td><td>0.76</td><td>0.24</td><td>2.71</td><td>0.51</td><td>0.45</td><td>0.32</td><td>0.69</td><td>1.71</td><td class="gbest">0.15</td><td>1.98</td><td>2.98</td><td>1.14</td></tr>
+            <tr><td class="l">SeaLLMs-Audio</td><td>7B</td><td>0.38</td><td>1.03</td><td>0.44</td><td>0.28</td><td>1.52</td><td>0.05</td><td>0.34</td><td>1.07</td><td>1.01</td><td>0.61</td><td>1.20</td><td>0.72</td></tr>
+            <tr><td class="l">Phi-4-multimodal</td><td>5.6B</td><td>0.09</td><td>5.10</td><td>2.92</td><td>2.76</td><td>1.93</td><td>2.98</td><td>0.10</td><td>3.11</td><td>2.45</td><td>3.15</td><td>2.13</td><td>2.43</td></tr>
+            <tr><td class="l">Qwen2-Audio-it</td><td>7B</td><td>0.14</td><td>1.88</td><td>1.03</td><td>0.74</td><td>1.48</td><td>1.21</td><td>0.21</td><td>1.08</td><td>1.08</td><td>1.02</td><td>1.17</td><td>1.00</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>7B</td><td class="gbest">0.07</td><td>0.55</td><td>0.25</td><td>0.10</td><td>1.34</td><td>0.54</td><td class="gbest">0.05</td><td>3.08</td><td>2.63</td><td>0.50</td><td>5.49</td><td>1.33</td></tr>
+            <tr><td class="l">Kimi-Audio</td><td>7B</td><td>0.25</td><td>3.42</td><td>15.86</td><td>0.58</td><td>4.46</td><td>2.60</td><td class="gbest">0.05</td><td>5.27</td><td>4.52</td><td>5.92</td><td>7.99</td><td>4.63</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>10B</td><td class="gbest">0.07</td><td class="best">0.18</td><td>0.23</td><td>0.09</td><td class="best">0.38</td><td>0.10</td><td>0.09</td><td class="best">0.77</td><td>0.39</td><td class="best">0.13</td><td class="best">0.83</td><td class="best">0.30</td></tr>
+            <tr><td class="l">Qwen3-Omni-Thinking</td><td>30B</td><td>0.11</td><td>0.51</td><td>0.20</td><td>0.06</td><td>0.86</td><td>0.04</td><td>0.13</td><td>5.71</td><td>1.06</td><td>0.29</td><td>7.21</td><td>1.47</td></tr>
+            <tr><td class="l">Qwen3-Omni-it</td><td>30B</td><td>0.09</td><td>0.42</td><td class="best">0.19</td><td class="best">0.05</td><td>0.44</td><td class="gbest">0.03</td><td>0.06</td><td>1.78</td><td>0.49</td><td>0.29</td><td>2.27</td><td>0.56</td></tr>
+            <tr class="sep"><td class="l">Gemini 2.5 Flash</td><td>—</td><td class="best">0.11</td><td class="gbest">0.13</td><td class="gbest">0.12</td><td class="gbest">0.03</td><td class="gbest">0.27</td><td class="best">0.05</td><td>0.18</td><td class="gbest">0.13</td><td class="best">0.16</td><td class="gbest">0.11</td><td class="gbest">0.31</td><td class="gbest">0.15</td></tr>
+            <tr><td class="l">GPT-4o</td><td>—</td><td>0.13</td><td>0.14</td><td>0.21</td><td>0.05</td><td>0.41</td><td>0.06</td><td class="best">0.09</td><td>0.30</td><td>0.38</td><td>0.17</td><td>0.66</td><td>0.24</td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="legend"><b>Bold</b> — best within group. <span class="g">Coloured</span> — best overall. Commercial systems: Gemini 2.5 Flash, GPT-4o. Click a column heading to sort.</p>
+      </div>
+  </div>
+
+  <div class="panel" id="panel-sp" role="tabpanel" aria-labelledby="tab-sp" hidden>
+      <div class="tbl">
+        <div class="tbl-head">
+          <h3>Speech Translation &amp; Spoken QA</h3>
+          <span class="cond">English and native prompts</span>
+        </div>
+        <p class="tbl-note">Translation scored with BLEU and chrF; spoken QA with a scaled GPT-4.1 judge score. Higher is better.</p>
+        <div class="scroll">
+          <table data-better="hi">
+          <thead>
+            <tr>
+              <th class="l" rowspan="2">Model</th><th rowspan="2">Size</th>
+              <th class="grp" colspan="2">ST · BLEU</th>
+              <th class="grp" colspan="2">ST · chrF</th>
+              <th class="grp" colspan="2">SQA</th>
+            </tr>
+            <tr><th>ENG</th><th>SEA</th><th>ENG</th><th>SEA</th><th>ENG</th><th>SEA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="l">Gemma-3n-it</td><td>2B</td><td>8.97</td><td>8.72</td><td>30.98</td><td>30.76</td><td>73.35</td><td>56.06</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>3B</td><td>7.60</td><td>6.27</td><td>33.00</td><td>28.46</td><td>78.42</td><td>73.14</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>3B</td><td>7.56</td><td>7.42</td><td>28.36</td><td>29.22</td><td>66.68</td><td>60.19</td></tr>
+            <tr><td class="l">Voxtral</td><td>3B</td><td>19.98</td><td>18.15</td><td>43.52</td><td>36.86</td><td>82.32</td><td>79.06</td></tr>
+            <tr><td class="l">Gemma-3n-it</td><td>4B</td><td>10.98</td><td>13.58</td><td>33.14</td><td>39.87</td><td>79.24</td><td>78.89</td></tr>
+            <tr><td class="l">Phi-4-multimodal</td><td>5.6B</td><td>3.04</td><td>0.32</td><td>17.10</td><td>4.87</td><td>64.69</td><td>47.36</td></tr>
+            <tr><td class="l">SeaLLMs-Audio</td><td>7B</td><td>10.74</td><td>10.11</td><td>32.44</td><td>28.40</td><td>76.42</td><td>78.38</td></tr>
+            <tr><td class="l">Qwen2-Audio-it</td><td>7B</td><td>4.54</td><td>3.20</td><td>23.37</td><td>19.46</td><td>65.82</td><td>57.95</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>7B</td><td>7.91</td><td>8.06</td><td>35.87</td><td>35.35</td><td>71.60</td><td>75.57</td></tr>
+            <tr><td class="l">Kimi-Audio</td><td>7B</td><td>3.36</td><td>7.71</td><td>18.02</td><td>24.35</td><td>69.62</td><td>63.49</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>10B</td><td>17.75</td><td>19.52</td><td>42.97</td><td>45.56</td><td>82.00</td><td>82.05</td></tr>
+            <tr><td class="l">Qwen3-Omni-Thinking</td><td>30B</td><td>12.97</td><td>11.95</td><td>37.70</td><td>37.59</td><td>84.93</td><td>85.28</td></tr>
+            <tr><td class="l">Qwen3-Omni-it</td><td>30B</td><td>15.28</td><td>13.55</td><td>41.56</td><td>39.66</td><td class="best">85.77</td><td class="best">85.62</td></tr>
+            <tr><td class="l">Whisper + Qwen3.6 <span style="color:var(--muted)">(cascade)</span></td><td>—</td><td class="best">20.83</td><td class="best">20.96</td><td class="best">44.87</td><td class="best">47.29</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr class="sep"><td class="l">Gemini 2.5 Flash</td><td>—</td><td>16.86</td><td>18.89</td><td>45.13</td><td class="gbest">53.94</td><td class="gbest">92.28</td><td class="gbest">86.21</td></tr>
+            <tr><td class="l">GPT-4o</td><td>—</td><td class="gbest">21.24</td><td class="gbest">21.39</td><td class="gbest">48.30</td><td>48.36</td><td>86.66</td><td>82.44</td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="legend"><b>Bold</b> — best within group. <span class="g">Coloured</span> — best overall. SQA is a scaled GPT-4.1 judge score. Click a column heading to sort.</p>
+      </div>
+  </div>
+
+  <div class="panel" id="panel-para" role="tabpanel" aria-labelledby="tab-para" hidden>
+      <div class="tbl">
+        <div class="tbl-head">
+          <h3>Paralinguistic tasks</h3>
+          <span class="cond">English and native prompts</span>
+        </div>
+        <p class="tbl-note">Age, gender and speaker recognition scored by macro-F1; emotion recognition by judge accuracy. Higher is better.</p>
+        <div class="scroll">
+          <table data-better="hi">
+          <thead>
+            <tr>
+              <th class="l" rowspan="2">Model</th><th rowspan="2">Size</th>
+              <th class="grp" colspan="2">AgeR</th><th class="grp" colspan="2">ER</th>
+              <th class="grp" colspan="2">GR</th><th class="grp" colspan="2">SpkR</th>
+            </tr>
+            <tr><th>ENG</th><th>SEA</th><th>ENG</th><th>SEA</th><th>ENG</th><th>SEA</th><th>ENG</th><th>SEA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="l">Gemma-3n-it</td><td>2B</td><td>26.82</td><td>22.70</td><td>12.21</td><td>13.17</td><td>11.49</td><td>10.05</td><td>37.16</td><td>32.07</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>3B</td><td>29.78</td><td>24.75</td><td>13.45</td><td>9.95</td><td>49.85</td><td>37.30</td><td>25.22</td><td>31.47</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>3B</td><td>33.14</td><td>28.16</td><td>23.99</td><td>18.73</td><td>41.44</td><td>36.48</td><td>43.45</td><td>29.91</td></tr>
+            <tr><td class="l">Voxtral</td><td>3B</td><td>37.26</td><td>28.49</td><td>10.62</td><td>5.35</td><td>39.78</td><td>20.41</td><td>42.84</td><td>38.67</td></tr>
+            <tr><td class="l">Gemma-3n-it</td><td>4B</td><td>32.41</td><td>29.97</td><td>12.46</td><td>13.93</td><td>35.41</td><td>23.54</td><td>33.01</td><td>34.13</td></tr>
+            <tr><td class="l">Phi-4-multimodal</td><td>5.6B</td><td>26.28</td><td>28.42</td><td>20.87</td><td>9.20</td><td>49.36</td><td>31.06</td><td>36.43</td><td>32.73</td></tr>
+            <tr><td class="l">SeaLLMs-Audio</td><td>7B</td><td>29.77</td><td>18.08</td><td>12.34</td><td>9.17</td><td>37.07</td><td>32.77</td><td>43.50</td><td>31.05</td></tr>
+            <tr><td class="l">Qwen2-Audio-it</td><td>7B</td><td>17.23</td><td>15.39</td><td>24.47</td><td>19.36</td><td>91.89</td><td>66.24</td><td>41.93</td><td>31.66</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>7B</td><td>15.23</td><td>18.28</td><td>16.33</td><td>10.45</td><td>65.03</td><td>49.17</td><td>15.55</td><td>18.61</td></tr>
+            <tr><td class="l">Kimi-Audio</td><td>7B</td><td>35.42</td><td>34.09</td><td class="gbest">36.86</td><td class="gbest">42.55</td><td>92.73</td><td class="best">71.36</td><td>46.58</td><td>29.61</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>10B</td><td>32.99</td><td>32.46</td><td>18.73</td><td>20.34</td><td>57.50</td><td>45.93</td><td>48.36</td><td>37.07</td></tr>
+            <tr><td class="l">Qwen3-Omni-Thinking</td><td>30B</td><td>38.10</td><td class="gbest">36.78</td><td>15.06</td><td>10.34</td><td>94.77</td><td>69.34</td><td>52.35</td><td>43.29</td></tr>
+            <tr><td class="l">Qwen3-Omni-it</td><td>30B</td><td class="gbest">39.56</td><td>36.70</td><td>15.94</td><td>11.31</td><td class="gbest">95.78</td><td>65.43</td><td class="best">56.15</td><td class="best">44.28</td></tr>
+            <tr class="sep"><td class="l">Gemini 2.5 Flash</td><td>—</td><td class="best">36.93</td><td class="best">36.33</td><td class="best">19.50</td><td>16.79</td><td class="best">92.54</td><td class="gbest">82.54</td><td class="gbest">58.01</td><td class="gbest">51.54</td></tr>
+            <tr><td class="l">GPT-4o</td><td>—</td><td>36.91</td><td>34.27</td><td>17.00</td><td class="best">19.50</td><td>59.40</td><td>46.78</td><td>14.49</td><td>19.04</td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="legend"><b>Bold</b> — best within group. <span class="g">Coloured</span> — best overall. AgeR/GR/SpkR: macro-F1; ER: judge accuracy. Click a column heading to sort.</p>
+      </div>
+  </div>
+
+  <div class="panel" id="panel-temporal" role="tabpanel" aria-labelledby="tab-temporal" hidden>
+      <div class="tbl">
+        <div class="tbl-head">
+          <h3>Temporal reasoning</h3>
+          <span class="cond">English prompts</span>
+        </div>
+        <p class="tbl-note">Stratified by audio duration. TCQ is WER/CER in percent (lower is better); TLoc is span-overlap F1 (higher is better). A dash means the model cannot process audio of that length.</p>
+        <div class="scroll">
+          <table>
+          <thead>
+            <tr>
+              <th class="l" rowspan="2">Model</th><th rowspan="2">Size</th>
+              <th class="grp" colspan="4" data-better="lo">TCQ · WER/CER %</th>
+              <th class="grp" colspan="4" data-better="hi">TLoc · F1</th>
+            </tr>
+            <tr>
+              <th>0–30s</th><th>30–60s</th><th>60–120s</th><th>120–180s</th>
+              <th>0–30s</th><th>30–60s</th><th>60–120s</th><th>120–180s</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="l">SeaLLMs-Audio</td><td>7B</td><td>5.48</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>11.57</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td class="l">Qwen2-Audio-it</td><td>7B</td><td>5.56</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>33.30</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>3B</td><td>8.74</td><td>9.20</td><td class="na">—</td><td class="na">—</td><td>30.49</td><td>18.21</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td class="l">Gemma-3n-it</td><td>2B</td><td>7.32</td><td>7.49</td><td class="na">—</td><td class="na">—</td><td>11.82</td><td>8.27</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td class="l">Gemma-3n-it</td><td>4B</td><td>6.76</td><td>7.38</td><td class="na">—</td><td class="na">—</td><td>13.25</td><td>8.72</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td class="l">Phi-4-multimodal</td><td>5.6B</td><td>20.67</td><td>14.90</td><td>16.25</td><td class="na">—</td><td>12.97</td><td>6.25</td><td>3.64</td><td class="na">—</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>3B</td><td>4.77</td><td>8.21</td><td>11.27</td><td class="na">—</td><td>18.82</td><td>10.28</td><td>5.14</td><td class="na">—</td></tr>
+            <tr><td class="l">Qwen2.5-Omni</td><td>7B</td><td>5.49</td><td>6.58</td><td>9.85</td><td class="na">—</td><td class="gbest">35.74</td><td class="gbest">19.98</td><td class="gbest">11.32</td><td class="na">—</td></tr>
+            <tr><td class="l">Kimi-Audio</td><td>7B</td><td>14.00</td><td>19.07</td><td>24.04</td><td>42.78</td><td>14.49</td><td>8.61</td><td>3.70</td><td>3.00</td></tr>
+            <tr><td class="l">Voxtral</td><td>3B</td><td>4.74</td><td>7.74</td><td>12.86</td><td>22.13</td><td>17.85</td><td>9.87</td><td>3.71</td><td>2.45</td></tr>
+            <tr><td class="l">MERaLiON-2</td><td>10B</td><td>5.12</td><td>9.48</td><td>14.72</td><td>17.67</td><td>22.22</td><td>12.37</td><td>6.40</td><td>4.53</td></tr>
+            <tr><td class="l">Qwen3-Omni-Thinking</td><td>30B</td><td>1.28</td><td>1.35</td><td>2.17</td><td>3.12</td><td>10.80</td><td>5.76</td><td>2.32</td><td>1.96</td></tr>
+            <tr><td class="l">Qwen3-Omni-it</td><td>30B</td><td class="gbest">1.18</td><td class="gbest">1.22</td><td class="gbest">1.34</td><td class="gbest">1.86</td><td>11.40</td><td>5.90</td><td>2.43</td><td>1.28</td></tr>
+            <tr class="sep"><td class="l">Gemini 2.5 Flash</td><td>—</td><td class="best">2.41</td><td class="best">2.64</td><td class="best">9.44</td><td class="best">4.09</td><td>11.66</td><td>7.70</td><td>5.57</td><td>5.30</td></tr>
+            <tr><td class="l">GPT-4o</td><td>—</td><td>5.06</td><td>6.82</td><td>7.38</td><td>8.59</td><td class="best">26.47</td><td class="best">17.83</td><td class="best">8.53</td><td class="gbest">5.38</td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="legend"><b>Bold</b> — best within group. <span class="g">Coloured</span> — best overall. Commercial systems: Gemini 2.5 Flash, GPT-4o. Click a column heading to sort.</p>
+      </div>
+  </div>
+</section>
+
+<section>
+  <h2>Key findings</h2>
+
+  <ul class="facts stack">
+    <li><b>Temporal reasoning degrades sharply with audio duration.</b> The best temporal
+      localization score achieved by any system falls from 35.74 F1 on 0–30s clips to 5.38 on
+      120–180s clips. Predicted spans also skew wide: recall exceeds precision at every duration and
+      in nearly every system, though both remain low.</li>
+
+    <li><b>Prompt language produces systematic disparities.</b> Aggregated across tasks,
+      instructing a model in native language rather than in English costs almost nothing in
+      performance for Chinese and Indonesian, a moderate amount for Filipino,
+      Vietnamese, Malay, Lao and Thai, and a large amount for Burmese, Tamil and Khmer.
+      A text-only control shows that MERaLiON-2-3B
+      translates tested native prompts correctly, yet still scores up to 15.23 points higher
+      under English prompts on age recognition.
+      The deficit is therefore in cross-modal instruction following rather than language understanding.</li>
+
+    <li><b>Emotion recognition and speech translation remain below usable accuracy.</b> The
+      highest emotion recognition score is 42.55 (Kimi-Audio, native prompts); no other system
+      exceeds 25 under either prompt condition. Speech translation peaks at 21.39 BLEU (GPT-4o)
+      and 53.94 chrF (Gemini 2.5 Flash), with the strongest open-weight result a Whisper +
+      Qwen3.6 cascade at 20.96 BLEU.</li>
+
+    <li><b>Refusal is a distinct failure mode from error.</b> GPT-4o scores 14.49 macro-F1 on
+      speaker recognition, but the breakdown shows abstentions rather than wrong predictions: it
+      declines 89.5% of queries and is correct on 100% of the 10.5% it answers.
+      Qwen2.5-Omni-7B scores comparably low (15.55 under English prompts, 18.61 under native
+      prompts) and also refuses frequently, but unlike GPT-4o it makes substantive errors on the
+      queries it does accept.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Citation</h2>
+  <div class="cite">
+    <button class="copy" id="copy" type="button">Copy</button>
+    <pre id="bibtex">@inproceedings{liao2026seaspeechbench,
+  title     = {{SEA-SpeechBench}: A Large-Scale Multitask Benchmark for Speech Understanding Across Southeast Asia},
+  author    = {Liao, Jingyi and Zhang, Wenyu and Liu, Zhuohan and He, Yingxu and Lin, Geyu and
+               Zou, Xunlong and Sun, Shuo and Alsagoff, Syed Ali Redha and Aw, Ai Ti},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2026}
+}</pre>
+  </div>
+</section>
+
+<footer>
+  <p>
+    <b>Correspondence:</b>
+    <a href="mailto:liao_jingyi@a-star.edu.sg">liao_jingyi@a-star.edu.sg</a>,
+    <a href="mailto:wen.projectz@gmail.com">wen.projectz@gmail.com</a>
+  </p>
+  <p>
+    Supported by the National Research Foundation, Singapore under its National Large Language
+    Models Funding Initiative. Any opinions, findings, conclusions, or recommendations expressed
+    in this material are those of the authors and do not reflect the views of the National
+    Research Foundation, Singapore.
+  </p>
+</footer>
+
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>
